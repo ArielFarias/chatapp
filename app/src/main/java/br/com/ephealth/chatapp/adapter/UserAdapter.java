@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.ephealth.chatapp.R;
-import br.com.ephealth.chatapp.model.User;
+import br.com.ephealth.chatapp.db.model.User;
 import br.com.ephealth.chatapp.viewHolder.UserViewHolder;
 
 public class UserAdapter extends RecyclerView.Adapter {

@@ -27,7 +27,7 @@ import java.util.List;
 import br.com.ephealth.chatapp.MessageActivity;
 import br.com.ephealth.chatapp.R;
 import br.com.ephealth.chatapp.adapter.UserAdapter;
-import br.com.ephealth.chatapp.model.User;
+import br.com.ephealth.chatapp.db.model.User;
 import es.dmoral.toasty.Toasty;
 
 public class UsersFragment extends Fragment {

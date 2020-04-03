@@ -26,7 +26,6 @@ public class StartActivity extends AppCompatActivity {
 
     FirebaseUser firebaseUser;
 
-
     @Override
     protected void onStart() {
         super.onStart();

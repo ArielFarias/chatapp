@@ -7,13 +7,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -21,6 +17,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 
+import br.com.ephealth.chatapp.db.IFirebase;
+import br.com.ephealth.chatapp.db.IUser;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -56,35 +54,29 @@ public class RegisterActivity extends AppCompatActivity {
     private void register(final String username, String email, String password) {
 
         auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser firebaseUser = auth.getCurrentUser();
-                            assert firebaseUser != null;
-                            String userId = firebaseUser.getUid();
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser firebaseUser = auth.getCurrentUser();
+                        assert firebaseUser != null;
+                        String userId = firebaseUser.getUid();
 
-                            reference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
+                        reference = FirebaseDatabase.getInstance().getReference(IFirebase.USERS).child(userId);
 
-                            HashMap<String, String> hashMap = new HashMap<>();
-                            hashMap.put("id", userId);
-                            hashMap.put("username", username);
-                            hashMap.put("imageURL", "default");
+                        HashMap<String, String> hashMap = new HashMap<>();
+                        hashMap.put(IUser.ID, userId);
+                        hashMap.put(IUser.USERNAME, username);
+                        hashMap.put(IUser.IMAGE_URL, IFirebase.DEFAULT);
 
-                            reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                }
-                            });
-                        } else {
-                            Toast.makeText(RegisterActivity.this, "Failed registering with this email or password", Toast.LENGTH_SHORT).show();
-                        }
+                        reference.setValue(hashMap).addOnCompleteListener(task1 -> {
+                            if (task1.isSuccessful()) {
+                                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                finish();
+                            }
+                        });
+                    } else {
+                        Toast.makeText(RegisterActivity.this, "Failed registering with this email or password", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

@@ -17,7 +17,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import br.com.ephealth.chatapp.model.User;
+import br.com.ephealth.chatapp.db.IFirebase;
+import br.com.ephealth.chatapp.db.model.User;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -51,16 +52,16 @@ public class MessageActivity extends AppCompatActivity {
         });
 
         intent = getIntent();
-        String userId = intent.getStringExtra("userId");
+        String userId = intent.getStringExtra(IntentParameters.userID);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        reference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
+        reference = FirebaseDatabase.getInstance().getReference(IFirebase.USERS).child(userId);
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 textViewUserName.setText(user.getUsername());
-                if (user.getImageURL().equals("default")) {
+                if (user.getImageURL().equals(IFirebase.DEFAULT)) {
                     circleImageViewProfile.setImageResource(R.mipmap.ic_launcher);
                 } else {
                     Glide.with(MessageActivity.this).load(user.getImageURL()).into(circleImageViewProfile);

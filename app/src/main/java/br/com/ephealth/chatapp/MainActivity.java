@@ -27,9 +27,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import br.com.ephealth.chatapp.db.IFirebase;
+import br.com.ephealth.chatapp.db.model.User;
 import br.com.ephealth.chatapp.fragments.ChatsFragment;
 import br.com.ephealth.chatapp.fragments.UsersFragment;
-import br.com.ephealth.chatapp.model.User;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -60,14 +61,14 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("");
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+        reference = FirebaseDatabase.getInstance().getReference(IFirebase.USERS).child(firebaseUser.getUid());
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 textViewUserName.setText(user.getUsername());
-                if (user.getImageURL().equals("default")) {
+                if (user.getImageURL().equals(IFirebase.DEFAULT)) {
                     circleImageViewProfile.setImageResource(R.mipmap.ic_launcher);
                 } else {
                     Glide.with(MainActivity.this).load(user.getImageURL()).into(circleImageViewProfile);
@@ -82,8 +83,8 @@ public class MainActivity extends AppCompatActivity {
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
-        viewPagerAdapter.addFragment(new ChatsFragment(), "Chats");
-        viewPagerAdapter.addFragment(new UsersFragment(), "Users");
+        viewPagerAdapter.addFragment(new ChatsFragment(), getString(R.string.chats));
+        viewPagerAdapter.addFragment(new UsersFragment(), getString(R.string.users));
 
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);

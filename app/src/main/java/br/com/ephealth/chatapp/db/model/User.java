@@ -1,6 +1,8 @@
-package br.com.ephealth.chatapp.model;
+package br.com.ephealth.chatapp.db.model;
 
-public class User {
+import br.com.ephealth.chatapp.db.IUser;
+
+public class User implements IUser {
     private String id;
     private String username;
     private String imageURL;
