@@ -33,7 +33,7 @@ public class UserAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context)
-                .inflate(R.layout.user_item, parent, false);
+                .inflate(R.layout.base_item, parent, false);
 
         UserViewHolder userViewHolder = new UserViewHolder(view, context);
         userViewHolder.itemView.setOnClickListener(view1 -> {

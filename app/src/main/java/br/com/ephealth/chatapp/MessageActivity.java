@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -22,9 +23,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import br.com.ephealth.chatapp.adapter.MessageAdapter;
 import br.com.ephealth.chatapp.db.IFirebase;
+import br.com.ephealth.chatapp.db.model.Chat;
 import br.com.ephealth.chatapp.db.model.User;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,6 +60,9 @@ public class MessageActivity extends AppCompatActivity {
     Intent intent;
     private String userId;
 
+    MessageAdapter messageAdapter;
+    List<Chat> chatList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +77,12 @@ public class MessageActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(v -> {
             finish();
         });
+
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        linearLayoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
 
         intent = getIntent();
         userId = intent.getStringExtra(IntentParameters.userID);
@@ -85,6 +99,8 @@ public class MessageActivity extends AppCompatActivity {
                 } else {
                     Glide.with(MessageActivity.this).load(user.getImageURL()).into(circleImageViewProfile);
                 }
+
+                readMessages(firebaseUser.getUid(), userId, user.getImageURL());
             }
 
             @Override
@@ -113,5 +129,33 @@ public class MessageActivity extends AppCompatActivity {
             Toasty.warning(this, R.string.cannotSendEmptyMessage, Toast.LENGTH_SHORT).show();
         }
         textInputEditTextMessage.setText("");
+    }
+
+    private void readMessages(String messageId, String userId, String imageURL) {
+        chatList = new ArrayList<>();
+
+        reference = FirebaseDatabase.getInstance().getReference(IFirebase.CHATS);
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                chatList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Chat chat = snapshot.getValue(Chat.class);
+                    if (chat.getReceiver().equals(messageId) && chat.getSender().equals(userId)
+                            || chat.getReceiver().equals(userId) && chat.getSender().equals(messageId)) {
+                        chatList.add(chat);
+                    }
+
+                    messageAdapter = new MessageAdapter(MessageActivity.this, null, imageURL);
+                    messageAdapter.addAll(chatList);
+                    recyclerView.setAdapter(messageAdapter);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }
