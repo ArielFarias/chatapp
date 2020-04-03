@@ -7,4 +7,6 @@
     <string name="error">Ocorreu um erro, tente novamente mais tarde!</string>
     <string name="chats">Conversas</string>
     <string name="users">Usuário</string>
+    <string name="cannotSendEmptyMessage">Não é possível enviar uma mensagem vazia!</string>
+    <string name="writeAMessage">Escreva uma mensagem</string>
 </resources>
