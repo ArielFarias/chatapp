@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "808266771544",
+    "firebase_url": "https://chatapp-4193a.firebaseio.com",
+    "project_id": "chatapp-4193a",
+    "storage_bucket": "chatapp-4193a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:808266771544:android:bb751c915a12f80c716e2d",
+        "android_client_info": {
+          "package_name": "br.com.ephealth.chatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "808266771544-3im0j3fe2p4s845g6q9ua154ougr5lu9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.ephealth.chatapp",
+            "certificate_hash": "52b683ec145d963d2dec44c0b6959908457fce27"
+          }
+        },
+        {
+          "client_id": "808266771544-crb1br9quev698jh84v4dpftklj0u7lq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsbNUk-YJ_KykfbwiBgZ435oIaW9DNr6A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "808266771544-crb1br9quev698jh84v4dpftklj0u7lq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
