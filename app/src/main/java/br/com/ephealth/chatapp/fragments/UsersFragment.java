@@ -1,6 +1,7 @@
 package br.com.ephealth.chatapp.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.ephealth.chatapp.MessageActivity;
 import br.com.ephealth.chatapp.R;
 import br.com.ephealth.chatapp.adapter.UserAdapter;
 import br.com.ephealth.chatapp.model.User;
@@ -59,10 +61,13 @@ public class UsersFragment extends Fragment {
             if (key != null && !key.isEmpty()) {
                 User item = userAdapter.getList().get(userAdapter.getSelectedItemPosition());
                 userAdapter.update(userAdapter.getSelectedItemPosition(), item);
-                Toasty.info(context, getString(R.string.comingSoon), Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(context, MessageActivity.class);
+                intent.putExtra("userId", key);
+                context.startActivity(intent);
 
             } else {
-                Toasty.info(context, getString(R.string.comingSoon), Toast.LENGTH_SHORT).show();
+                Toasty.error(context, getString(R.string.error), Toast.LENGTH_SHORT).show();
             }
         };
     }

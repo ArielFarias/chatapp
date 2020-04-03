@@ -9,14 +9,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".MessageActivity"></activity>
         <activity
-            android:name="br.com.ephealth.chatapp.LoginActivity"
-            android:parentActivityName="br.com.ephealth.chatapp.StartActivity" />
-        <activity android:name="br.com.ephealth.chatapp.MainActivity" />
+            android:name=".LoginActivity"
+            android:parentActivityName=".StartActivity" />
+        <activity android:name=".MainActivity" />
         <activity
-            android:name="br.com.ephealth.chatapp.RegisterActivity"
-            android:parentActivityName="br.com.ephealth.chatapp.StartActivity" />
-        <activity android:name="br.com.ephealth.chatapp.StartActivity">
+            android:name=".RegisterActivity"
+            android:parentActivityName=".StartActivity" />
+        <activity android:name=".StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
