@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import br.com.ephealth.chatapp.db.IFirebase;
 import br.com.ephealth.chatapp.db.model.User;
 import br.com.ephealth.chatapp.fragments.ChatsFragment;
+import br.com.ephealth.chatapp.fragments.ProfileFragment;
 import br.com.ephealth.chatapp.fragments.UsersFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -85,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
         viewPagerAdapter.addFragment(new ChatsFragment(), getString(R.string.chats));
         viewPagerAdapter.addFragment(new UsersFragment(), getString(R.string.users));
+        viewPagerAdapter.addFragment(new ProfileFragment(), getString(R.string.profile));
 
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);

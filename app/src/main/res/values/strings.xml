@@ -9,4 +9,5 @@
     <string name="users">Usuário</string>
     <string name="cannotSendEmptyMessage">Não é possível enviar uma mensagem vazia!</string>
     <string name="writeAMessage">Escreva uma mensagem</string>
+    <string name="profile">Perfil</string>
 </resources>
