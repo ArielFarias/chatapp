@@ -7,4 +7,6 @@ public interface IFirebase {
     String SENDER = "sender";
     String RECEIVER = "receiver";
     String MESSAGE = "message";
+    String UPLOADS = "uploads";
+    String IMAGE_URL = "imageURL";
 }
