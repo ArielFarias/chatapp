@@ -65,6 +65,7 @@ public class RegisterActivity extends BaseActivity {
                         hashMap.put(IUser.USERNAME, username);
                         hashMap.put(IUser.IMAGE_URL, IFirebase.DEFAULT);
                         hashMap.put(IUser.STATUS, IUser.OFFLINE);
+                        hashMap.put(IUser.NORMALIZED_NAME, GeneralUtils.normalizedName(username));
 
                         reference.setValue(hashMap).addOnCompleteListener(task1 -> {
                             if (task1.isSuccessful()) {

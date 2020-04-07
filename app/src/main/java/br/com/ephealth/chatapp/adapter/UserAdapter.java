@@ -100,6 +100,7 @@ public class UserAdapter extends RecyclerView.Adapter {
 
     public void clear() {
         this.list = new ArrayList<>();
+
     }
 
     private void add(User modelItem) {

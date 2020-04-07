@@ -7,16 +7,18 @@ public class User implements IUser {
     private String username;
     private String imageURL;
     private String status;
+    private String normalizedName;
 
 
     public User() {
     }
 
-    public User(String id, String username, String imageURL, String status) {
+    public User(String id, String username, String imageURL, String status, String normalizedName) {
         this.id = id;
         this.username = username;
         this.imageURL = imageURL;
         this.status = status;
+        this.normalizedName = normalizedName;
     }
 
     public String getId() {
@@ -49,5 +51,13 @@ public class User implements IUser {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getNormalizedName() {
+        return normalizedName;
+    }
+
+    public void setNormalizedName(String normalizedName) {
+        this.normalizedName = normalizedName;
     }
 }
