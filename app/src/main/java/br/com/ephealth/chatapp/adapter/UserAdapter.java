@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.ephealth.chatapp.R;
+import br.com.ephealth.chatapp.db.IFirebase;
+import br.com.ephealth.chatapp.db.IUser;
 import br.com.ephealth.chatapp.db.model.User;
 import br.com.ephealth.chatapp.viewHolder.UserViewHolder;
 
@@ -22,11 +24,13 @@ public class UserAdapter extends RecyclerView.Adapter {
     private List<User> list;
     private int selectedItemPosition;
     private OnClickItemListener listener;
+    private boolean isChat;
 
-    public UserAdapter(Context context, OnClickItemListener listener) {
+    public UserAdapter(Context context, OnClickItemListener listener, boolean isChat) {
         this.list = new ArrayList<>();
         this.context = context;
         this.listener = listener;
+        this.isChat = isChat;
     }
 
     @NonNull
@@ -56,7 +60,17 @@ public class UserAdapter extends RecyclerView.Adapter {
         viewHolder.setKey(userItem.getId());
         viewHolder.setTextUserName(userItem.getUsername());
 
-        if (userItem.getImageURL().equals("default")) {
+        if (isChat) {
+            if (userItem.getStatus().equals(IUser.ONLINE)) {
+                viewHolder.getCircleImageViewOnline().setVisibility(View.VISIBLE);
+                viewHolder.getCircleImageViewOffline().setVisibility(View.GONE);
+            } else {
+                viewHolder.getCircleImageViewOnline().setVisibility(View.GONE);
+                viewHolder.getCircleImageViewOffline().setVisibility(View.VISIBLE);
+            }
+        }
+
+        if (userItem.getImageURL().equals(IFirebase.DEFAULT)) {
             viewHolder.getCircleImageView().setImageResource(R.mipmap.ic_launcher);
         } else {
             Glide.with(context).load(userItem.getImageURL()).into(viewHolder.getCircleImageView());

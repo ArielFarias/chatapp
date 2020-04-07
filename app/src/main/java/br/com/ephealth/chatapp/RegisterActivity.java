@@ -7,8 +7,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -23,7 +21,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends BaseActivity {
 
     FirebaseAuth auth;
     DatabaseReference reference;
@@ -66,6 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
                         hashMap.put(IUser.ID, userId);
                         hashMap.put(IUser.USERNAME, username);
                         hashMap.put(IUser.IMAGE_URL, IFirebase.DEFAULT);
+                        hashMap.put(IUser.STATUS, IUser.OFFLINE);
 
                         reference.setValue(hashMap).addOnCompleteListener(task1 -> {
                             if (task1.isSuccessful()) {

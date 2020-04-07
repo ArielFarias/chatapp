@@ -9,4 +9,5 @@ public interface IFirebase {
     String MESSAGE = "message";
     String UPLOADS = "uploads";
     String IMAGE_URL = "imageURL";
+    String STATUS = "status";
 }

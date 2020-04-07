@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -15,7 +13,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class StartActivity extends AppCompatActivity {
+public class StartActivity extends BaseActivity {
 
     @BindView(R.id.buttonLogin)
     Button buttonLogin;

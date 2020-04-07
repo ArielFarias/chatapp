@@ -11,10 +11,12 @@ import br.com.ephealth.chatapp.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class BaseViewHolder extends RecyclerView.ViewHolder {
-
     private String key;
+
     private Context context;
     private CircleImageView circleImageView;
+    private CircleImageView circleImageViewOnline;
+    private CircleImageView circleImageViewOffline;
     private TextView textView;
 
     public BaseViewHolder(@NonNull View itemView, @NonNull Context context) {
@@ -22,6 +24,8 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
         this.context = context;
         circleImageView = itemView.findViewById(R.id.circleImageViewProfile);
+        circleImageViewOnline = itemView.findViewById(R.id.circleImageViewProfileOnline);
+        circleImageViewOffline = itemView.findViewById(R.id.circleImageViewProfileOffline);
         textView = itemView.findViewById(R.id.textViewUserName);
 
     }
@@ -52,5 +56,21 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     public void setContext(Context context) {
         this.context = context;
+    }
+
+    public CircleImageView getCircleImageViewOnline() {
+        return circleImageViewOnline;
+    }
+
+    public void setCircleImageViewOnline(CircleImageView circleImageViewOnline) {
+        this.circleImageViewOnline = circleImageViewOnline;
+    }
+
+    public CircleImageView getCircleImageViewOffline() {
+        return circleImageViewOffline;
+    }
+
+    public void setCircleImageViewOffline(CircleImageView circleImageViewOffline) {
+        this.circleImageViewOffline = circleImageViewOffline;
     }
 }

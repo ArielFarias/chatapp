@@ -1,5 +1,6 @@
 package br.com.ephealth.chatapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,7 +9,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -26,8 +26,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import br.com.ephealth.chatapp.db.IFirebase;
+import br.com.ephealth.chatapp.db.IUser;
 import br.com.ephealth.chatapp.db.model.User;
 import br.com.ephealth.chatapp.fragments.ChatsFragment;
 import br.com.ephealth.chatapp.fragments.ProfileFragment;
@@ -36,7 +38,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     @BindView(R.id.circleImageViewProfile)
     CircleImageView circleImageViewProfile;
@@ -51,12 +53,15 @@ public class MainActivity extends AppCompatActivity {
 
     FirebaseUser firebaseUser;
     DatabaseReference reference;
+    public Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        context = getApplicationContext();
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
@@ -72,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                 if (user.getImageURL().equals(IFirebase.DEFAULT)) {
                     circleImageViewProfile.setImageResource(R.mipmap.ic_launcher);
                 } else {
-                    Glide.with(MainActivity.this).load(user.getImageURL()).into(circleImageViewProfile);
+                    Glide.with(getApplicationContext()).load(user.getImageURL()).into(circleImageViewProfile);
                 }
             }
 
@@ -103,8 +108,7 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.logout:
                 FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(MainActivity.this, StartActivity.class));
-                finish();
+                startActivity(new Intent(MainActivity.this, StartActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 return true;
         }
         return false;
@@ -142,5 +146,27 @@ public class MainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             return titles.get(position);
         }
+    }
+
+    private void status(String status) {
+        reference = FirebaseDatabase.getInstance().getReference(IFirebase.USERS).child(firebaseUser.getUid());
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put(IFirebase.STATUS, status);
+
+        reference.updateChildren(map);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        status(IUser.ONLINE);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        status(IUser.OFFLINE);
     }
 }

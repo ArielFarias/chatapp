@@ -7,7 +7,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,6 +28,7 @@ import java.util.List;
 
 import br.com.ephealth.chatapp.adapter.MessageAdapter;
 import br.com.ephealth.chatapp.db.IFirebase;
+import br.com.ephealth.chatapp.db.IUser;
 import br.com.ephealth.chatapp.db.model.Chat;
 import br.com.ephealth.chatapp.db.model.User;
 import butterknife.BindView;
@@ -37,7 +37,7 @@ import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import es.dmoral.toasty.Toasty;
 
-public class MessageActivity extends AppCompatActivity {
+public class MessageActivity extends BaseActivity {
 
     @BindView(R.id.circleImageViewProfile)
     CircleImageView circleImageViewProfile;
@@ -75,7 +75,7 @@ public class MessageActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(v -> {
-            finish();
+            startActivity(new Intent(MessageActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
         });
 
         recyclerView = findViewById(R.id.recyclerView);
@@ -97,7 +97,7 @@ public class MessageActivity extends AppCompatActivity {
                 if (user.getImageURL().equals(IFirebase.DEFAULT)) {
                     circleImageViewProfile.setImageResource(R.mipmap.ic_launcher);
                 } else {
-                    Glide.with(MessageActivity.this).load(user.getImageURL()).into(circleImageViewProfile);
+                    Glide.with(getApplicationContext()).load(user.getImageURL()).into(circleImageViewProfile);
                 }
 
                 readMessages(firebaseUser.getUid(), userId, user.getImageURL());
@@ -157,5 +157,27 @@ public class MessageActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void status(String status) {
+        reference = FirebaseDatabase.getInstance().getReference(IFirebase.USERS).child(firebaseUser.getUid());
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put(IFirebase.STATUS, status);
+
+        reference.updateChildren(map);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        status(IUser.ONLINE);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        status(IUser.OFFLINE);
     }
 }

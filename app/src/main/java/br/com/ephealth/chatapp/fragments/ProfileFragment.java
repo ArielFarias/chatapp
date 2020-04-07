@@ -34,6 +34,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.HashMap;
 
+import br.com.ephealth.chatapp.BaseActivity;
 import br.com.ephealth.chatapp.R;
 import br.com.ephealth.chatapp.db.IFirebase;
 import br.com.ephealth.chatapp.db.model.User;
@@ -76,7 +77,7 @@ public class ProfileFragment extends Fragment {
                 if (user.getImageURL().equals(IFirebase.DEFAULT)) {
                     circleImageViewProfile.setImageResource(R.mipmap.ic_launcher);
                 } else {
-                    Glide.with(getContext()).load(user.getImageURL()).into(circleImageViewProfile);
+                    Glide.with(BaseActivity.getGlobalContext()).load(user.getImageURL()).into(circleImageViewProfile);
                 }
             }
 
