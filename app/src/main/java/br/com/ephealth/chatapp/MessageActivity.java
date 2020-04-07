@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import br.com.ephealth.chatapp.adapter.MessageAdapter;
+import br.com.ephealth.chatapp.db.IChatList;
 import br.com.ephealth.chatapp.db.IFirebase;
 import br.com.ephealth.chatapp.db.IUser;
 import br.com.ephealth.chatapp.db.model.Chat;
@@ -145,6 +146,43 @@ public class MessageActivity extends BaseActivity {
         hashMap.put(IFirebase.IS_SEEN, false);
         reference.child(IFirebase.CHATS).push().setValue(hashMap);
 
+        // add user to chat fragment in creator of the chat
+        DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference(IChatList.CHATLIST)
+                .child(firebaseUser.getUid())
+                .child(userId);
+
+        chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    chatRef.child(IUser.ID).setValue(userId);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        // add user to chat fragment in the receiver of the chat
+        DatabaseReference chatRefReceiver = FirebaseDatabase.getInstance().getReference(IChatList.CHATLIST)
+                .child(userId)
+                .child(firebaseUser.getUid());
+
+        chatRefReceiver.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    chatRefReceiver.child(IUser.ID).setValue(firebaseUser.getUid());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @OnClick(R.id.buttonSend)
