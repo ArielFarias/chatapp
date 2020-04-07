@@ -10,4 +10,5 @@ public interface IFirebase {
     String UPLOADS = "uploads";
     String IMAGE_URL = "imageURL";
     String STATUS = "status";
+    String IS_SEEN = "isseen";
 }

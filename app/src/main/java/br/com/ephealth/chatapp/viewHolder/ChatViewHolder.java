@@ -13,11 +13,14 @@ public class ChatViewHolder extends BaseViewHolder {
     private TextView textViewMessage;
     private CircleImageView circleImageView;
 
+    private TextView textViewSeen;
+
     public ChatViewHolder(@NonNull View itemView, @NonNull Context context) {
         super(itemView, context);
 
         textViewMessage = itemView.findViewById(R.id.textViewShowMessage);
         circleImageView = itemView.findViewById(R.id.circleImageViewProfile);
+        textViewSeen = itemView.findViewById(R.id.textViewSeen);
     }
 
     public TextView getTextViewMessage() {
@@ -36,5 +39,13 @@ public class ChatViewHolder extends BaseViewHolder {
     @Override
     public void setCircleImageView(CircleImageView circleImageView) {
         this.circleImageView = circleImageView;
+    }
+
+    public TextView getTextViewSeen() {
+        return textViewSeen;
+    }
+
+    public void setTextViewSeen(String text) {
+        textViewSeen.setText(text);
     }
 }

@@ -76,6 +76,16 @@ public class MessageAdapter extends RecyclerView.Adapter {
         } else {
             Glide.with(context).load(imageURL).into(viewHolder.getCircleImageView());
         }
+
+        if (position == list.size() - 1) {
+            if (chatItem.isIsseen()) {
+                viewHolder.setTextViewSeen(context.getString(R.string.visualized));
+            } else {
+                viewHolder.setTextViewSeen(context.getString(R.string.delivered));
+            }
+        } else {
+            viewHolder.getTextViewSeen().setVisibility(View.GONE);
+        }
     }
 
     @Override

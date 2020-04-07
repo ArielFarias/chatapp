@@ -11,4 +11,6 @@
     <string name="writeAMessage">Escreva uma mensagem</string>
     <string name="profile">Perfil</string>
     <string name="search">Buscar...</string>
+    <string name="visualized">Vizualiada</string>
+    <string name="delivered">Entregue</string>
 </resources>

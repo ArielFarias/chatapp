@@ -63,6 +63,8 @@ public class MessageActivity extends BaseActivity {
     MessageAdapter messageAdapter;
     List<Chat> chatList;
 
+    ValueEventListener seenListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,6 +110,30 @@ public class MessageActivity extends BaseActivity {
 
             }
         });
+
+        seenMessage(userId);
+    }
+
+    private void seenMessage(String userId) {
+        reference = FirebaseDatabase.getInstance().getReference(IFirebase.CHATS);
+        seenListener = reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Chat chat = snapshot.getValue(Chat.class);
+                    if (chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userId)) {
+                        HashMap<String, Object> hashMap = new HashMap<>();
+                        hashMap.put(IFirebase.IS_SEEN, true);
+                        snapshot.getRef().updateChildren(hashMap);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void sendMessage(String sender, String receiver, String message) {
@@ -116,6 +142,7 @@ public class MessageActivity extends BaseActivity {
         hashMap.put(IFirebase.SENDER, sender);
         hashMap.put(IFirebase.RECEIVER, receiver);
         hashMap.put(IFirebase.MESSAGE, message);
+        hashMap.put(IFirebase.IS_SEEN, false);
         reference.child(IFirebase.CHATS).push().setValue(hashMap);
 
     }
@@ -178,6 +205,7 @@ public class MessageActivity extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        reference.removeEventListener(seenListener);
         status(IUser.OFFLINE);
     }
 }
