@@ -18,4 +18,5 @@
     <string name="yourEmail">Seu email</string>
     <string name="reset">reset</string>
     <string name="resetInfo">Ao clicar em RESEt, você receberá um email para resetar sua senha!</string>
+    <string name="noMessages">Sem mensagens</string>
 </resources>

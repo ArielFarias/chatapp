@@ -4,11 +4,19 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +24,7 @@ import java.util.List;
 import br.com.ephealth.chatapp.R;
 import br.com.ephealth.chatapp.db.IFirebase;
 import br.com.ephealth.chatapp.db.IUser;
+import br.com.ephealth.chatapp.db.model.Chat;
 import br.com.ephealth.chatapp.db.model.User;
 import br.com.ephealth.chatapp.viewHolder.UserViewHolder;
 
@@ -25,6 +34,7 @@ public class UserAdapter extends RecyclerView.Adapter {
     private int selectedItemPosition;
     private OnClickItemListener listener;
     private boolean isChat;
+    String theLastMessage;
 
     public UserAdapter(Context context, OnClickItemListener listener, boolean isChat) {
         this.list = new ArrayList<>();
@@ -61,6 +71,8 @@ public class UserAdapter extends RecyclerView.Adapter {
         viewHolder.setTextUserName(userItem.getUsername());
 
         if (isChat) {
+            viewHolder.getTextViewLastMessage().setVisibility(View.VISIBLE);
+            lastMessage(userItem.getId(), viewHolder.getTextViewLastMessage());
             if (userItem.getStatus().equals(IUser.ONLINE)) {
                 viewHolder.getCircleImageViewOnline().setVisibility(View.VISIBLE);
                 viewHolder.getCircleImageViewOffline().setVisibility(View.GONE);
@@ -68,6 +80,9 @@ public class UserAdapter extends RecyclerView.Adapter {
                 viewHolder.getCircleImageViewOnline().setVisibility(View.GONE);
                 viewHolder.getCircleImageViewOffline().setVisibility(View.VISIBLE);
             }
+        } else {
+            viewHolder.getTextViewLastMessage().setVisibility(View.GONE);
+
         }
 
         if (userItem.getImageURL().equals(IFirebase.DEFAULT)) {
@@ -126,5 +141,36 @@ public class UserAdapter extends RecyclerView.Adapter {
 
     public interface OnClickItemListener {
         void setOnClick(String key);
+    }
+
+    private void lastMessage(String userId, TextView textViewLastMessage) {
+        theLastMessage = "default";
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference(IFirebase.CHATS);
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Chat chat = snapshot.getValue(Chat.class);
+                    if (chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userId) ||
+                            chat.getReceiver().equals(userId) && chat.getSender().equals(firebaseUser.getUid())) {
+                        theLastMessage = chat.getMessage();
+                    }
+                }
+
+                if ("default".equals(theLastMessage)) {
+                    textViewLastMessage.setText(R.string.noMessages);
+                } else {
+                    textViewLastMessage.setText(theLastMessage);
+                }
+                theLastMessage = "default";
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }

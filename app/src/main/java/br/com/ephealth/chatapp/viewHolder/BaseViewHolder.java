@@ -18,6 +18,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
     private CircleImageView circleImageViewOnline;
     private CircleImageView circleImageViewOffline;
     private TextView textView;
+    private TextView textViewLastMessage;
 
     public BaseViewHolder(@NonNull View itemView, @NonNull Context context) {
         super(itemView);
@@ -27,6 +28,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         circleImageViewOnline = itemView.findViewById(R.id.circleImageViewProfileOnline);
         circleImageViewOffline = itemView.findViewById(R.id.circleImageViewProfileOffline);
         textView = itemView.findViewById(R.id.textViewUserName);
+        textViewLastMessage = itemView.findViewById(R.id.textViewLastMessage);
 
     }
 
@@ -72,5 +74,13 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     public void setCircleImageViewOffline(CircleImageView circleImageViewOffline) {
         this.circleImageViewOffline = circleImageViewOffline;
+    }
+
+    public TextView getTextViewLastMessage() {
+        return textViewLastMessage;
+    }
+
+    public void setTextViewLastMessage(String text) {
+        textViewLastMessage.setText(text);
     }
 }

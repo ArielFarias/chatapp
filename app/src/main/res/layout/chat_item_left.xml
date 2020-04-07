@@ -30,5 +30,5 @@
         android:layout_below="@+id/textViewShowMessage"
         android:visibility="gone"
         tools:text="seen" />
-
+    s
 </RelativeLayout>
